@@ -18,7 +18,7 @@ pub fn build(b: *std.Build) void {
             lib.addCSourceFile(.{ .file = .{ .path = "src/boxer_win.c" }, .flags = &.{} });
         },
         .linux => {
-            lib.linkSystemLibrary("gtk+-3.0");
+            // lib.linkSystemLibrary("gtk+-3.0");
         },
         .macos => {
             lib.defineCMacro("__kernel_ptr_semantics", "");
