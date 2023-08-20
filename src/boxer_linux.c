@@ -53,29 +53,3 @@ static BoxerSelection getSelection(gint response)
       return BoxerSelectionNone;
    }
 }
-
-BoxerSelection boxerShow(const char* message, const char* title, BoxerStyle style, BoxerButtons buttons)
-{
-   if (!gtk_init_check(0, NULL))
-   {
-      return BoxerSelectionError;
-   }
-
-   // Create a parent window to stop gtk_dialog_run from complaining
-   GtkWidget *parent = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
-   GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
-                                              GTK_DIALOG_MODAL,
-                                              getMessageType(style),
-                                              getButtonsType(buttons),
-                                              "%s",
-                                              message);
-   gtk_window_set_title(GTK_WINDOW(dialog), title);
-   BoxerSelection selection = getSelection(gtk_dialog_run(GTK_DIALOG(dialog)));
-
-   gtk_widget_destroy(GTK_WIDGET(dialog));
-   gtk_widget_destroy(GTK_WIDGET(parent));
-   while (g_main_context_iteration(NULL, FALSE));
-
-   return selection;
-}

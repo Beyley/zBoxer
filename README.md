@@ -1,8 +1,8 @@
-# Boxer 🥊
+# zBoxer 🥊
 
 ## Introduction
 
-Boxer is a simple library that allows for easy cross-platform creation of message boxes / alerts / what have you.
+zBoxer is a fork of Bozer, a simple library that allows for easy cross-platform creation of message boxes / alerts / what have you.
 
 ## Example
 
@@ -20,47 +20,33 @@ Linux:
 
 ## Language
 
-Boxer is written in C++, though it has a C branch available as well.
+zBoxer is written in C, Obj-C and Zig.
 
-## Compiling Boxer
+## Compiling zBoxer
 
-Boxer is set up to be built with CMake.
+zBoxer is set up to be built with CMake.
 
 To generate a static library, execute CMake with the root of the repo as the source directory. Additionally, the example program can be built by enabling the BOXER_BUILD_EXAMPLES option.
 
-On Linux, Boxer requires the gtk+-3.0 package.
+On Linux, zBoxer requires the gtk+-3.0 package to compile, but does not directly link against it.
 
-## Including Boxer
+## Including zBoxer
 
-Wherever you want to use Boxer, just include the header:
+Wherever you want to use zBoxer, just include the header:
 
 ```c++
 #include <boxer/boxer.h>
 ```
 
-## Linking Against Boxer
+## Linking Against zBoxer
 
 ### Static
 
-If Boxer was built statically, just link against the generated static library.
-
-### CMake
-
-To compile Boxer along with another application using CMake, first add the Boxer subdirectory:
-
-```cmake
-add_subdirectory("path/to/Boxer")
-```
-
-Then link against the Boxer library:
-
-```cmake
-target_link_libraries(<target> <INTERFACE|PUBLIC|PRIVATE> Boxer)
-```
+If zBoxer was built statically, just link against the generated static library.
 
 ## Using Boxer
 
-To create a message box using Boxer, call the 'boxerShow' method and provide a message, title, style, and buttons:
+To create a message box using zBoxer, call the 'boxerShow' C method and provide a message, title, style, and buttons:
 
 ```c
 boxerShow("Simple message boxes are very easy to create.", "Simple Example", kBoxerDefaultStyle, kBoxerDefaultButtons);
@@ -76,13 +62,13 @@ Calls to 'show' are blocking - execution of your program will not continue until
 
 ### Encoding
 
-Boxer accepts strings encoded in UTF-8:
+zBoxer accepts strings encoded in UTF-8:
 
 ```c
 boxerShow(u8"Boxer accepts UTF-8 strings. 💯", u8"Unicode 👍", kBoxerDefaultStyle, kBoxerDefaultButtons);
 ```
 
-On Windows, `UNICODE` needs to be defined when compiling Boxer to enable UTF-8 support:
+On Windows, `UNICODE` needs to be defined when compiling zBoxer to enable UTF-8 support:
 
 ```cmake
 if (WIN32)
