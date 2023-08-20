@@ -10,12 +10,12 @@ pub fn build(b: *std.Build) void {
         .root_source_file = .{ .path = "src/boxer.zig" },
         .optimize = optimize,
     });
-    lib.addIncludePath(.{ .path = "include" });
-    lib.addIncludePath(.{ .path = "src" });
+    lib.addIncludePath(.{ .path = root_path ++ "include" });
+    lib.addIncludePath(.{ .path = root_path ++ "src" });
     switch (target.getOsTag()) {
         .windows => {
             lib.defineCMacro("UNICODE", "1");
-            lib.addCSourceFile(.{ .file = .{ .path = "src/boxer_win.c" }, .flags = &.{} });
+            lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_win.c" }, .flags = &.{} });
         },
         .linux => {
             // lib.linkSystemLibrary("gtk+-3.0");
@@ -25,7 +25,7 @@ pub fn build(b: *std.Build) void {
 
             @import("xcode_frameworks").addPaths(b, lib);
 
-            lib.addCSourceFile(.{ .file = .{ .path = "src/boxer_mac.m" }, .flags = &.{} });
+            lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_mac.m" }, .flags = &.{} });
 
             lib.linkSystemLibraryName("objc");
 
@@ -42,14 +42,14 @@ pub fn build(b: *std.Build) void {
     const exe = b.addExecutable(.{
         .name = "example",
         .target = target,
-        .root_source_file = .{ .path = "examples/example.zig" },
+        .root_source_file = .{ .path = root_path ++ "examples/example.zig" },
         .optimize = optimize,
     });
     if (target.getOsTag() == .macos) {
         @import("xcode_frameworks").addPaths(b, exe);
     }
     exe.linkLibC();
-    exe.addIncludePath(.{ .path = "include" });
+    exe.addIncludePath(.{ .path = root_path ++ "include" });
     exe.linkLibrary(lib);
     b.installArtifact(exe);
 
@@ -61,3 +61,9 @@ pub fn build(b: *std.Build) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 }
+
+fn root() []const u8 {
+    return std.fs.path.dirname(@src().file) orelse ".";
+}
+
+const root_path = root() ++ "/";
