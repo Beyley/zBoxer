@@ -24,25 +24,43 @@ zBoxer is written in C, Obj-C and Zig.
 
 ## Compiling zBoxer
 
-zBoxer is set up to be built with CMake.
+zBoxer is set up to be built with Zig.
 
-To generate a static library, execute CMake with the root of the repo as the source directory. Additionally, the example program can be built by enabling the BOXER_BUILD_EXAMPLES option.
-
-On Linux, zBoxer requires the gtk+-3.0 package to compile, but does not directly link against it.
+Just run `zig build` in the project root, can cross compile from/to all supported platforms, and no external deps are needed
 
 ## Including zBoxer
 
-Wherever you want to use zBoxer, just include the header:
-
-```c++
-#include <boxer/boxer.h>
+`build.zig`:
+```zig
+const zboxer = b.dependency("zBoxer", .{
+   .target = target,
+   .optimize = optimize,
+});
+const zboxer_lib = zboxer.artifact("boxer");
+if (target.getOsTag() == .macos) {
+   @import("xcode_frameworks").addPaths(b, exe);
+}
+exe.linkLibrary(zboxer_lib);
+try exe.include_dirs.appendSlice(zboxer_lib.include_dirs.items);
 ```
 
-## Linking Against zBoxer
-
-### Static
-
-If zBoxer was built statically, just link against the generated static library.
+`build.zig.zon`:
+```zig
+.{
+   .name = "APPNAME",
+   .version = "0.0.0",
+   .dependencies = .{
+      .zBoxer = .{
+         .url = "https://github.com/Beyley/zBoxer/archive/LATEST_COMMIT_HASH_HERE.tar.gz",
+      },
+      .xcode_frameworks = .{
+         .url = "https://github.com/hexops/xcode-frameworks-pkg/archive/d486474a6af7fafd89e8314e0bf7eca4709f811b.tar.gz",
+         .hash = "1220293eae4bf67a7c27a18a8133621337cde91a97bc6859a9431b3b2d4217dfb5fb",
+      },
+   },
+}
+```
+Then when it complains that the hash is wrong, add the corrosponding `.hash = "HASHHERE",` into the `zBoxer` dependency
 
 ## Using Boxer
 
@@ -62,16 +80,4 @@ Calls to 'show' are blocking - execution of your program will not continue until
 
 ### Encoding
 
-zBoxer accepts strings encoded in UTF-8:
-
-```c
-boxerShow(u8"Boxer accepts UTF-8 strings. 💯", u8"Unicode 👍", kBoxerDefaultStyle, kBoxerDefaultButtons);
-```
-
-On Windows, `UNICODE` needs to be defined when compiling zBoxer to enable UTF-8 support:
-
-```cmake
-if (WIN32)
-   target_compile_definitions(Boxer PRIVATE UNICODE)
-endif (WIN32)
-```
+zBoxer accepts strings encoded in UTF-8
