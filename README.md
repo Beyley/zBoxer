@@ -2,7 +2,7 @@
 
 ## Introduction
 
-zBoxer is a fork of Bozer, a simple library that allows for easy cross-platform creation of message boxes / alerts / what have you.
+zBoxer is a fork of Boxer, a simple library that allows for easy cross-platform creation of message boxes / alerts / what have you.
 
 ## Example
 
