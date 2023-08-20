@@ -37,7 +37,6 @@ pub fn build(b: *std.Build) void {
         else => @panic("Unknown target!"),
     }
     lib.linkLibC();
-    lib.linkLibCpp();
     b.installArtifact(lib);
 
     const exe = b.addExecutable(.{
@@ -50,7 +49,6 @@ pub fn build(b: *std.Build) void {
         @import("xcode_frameworks").addPaths(b, exe);
     }
     exe.linkLibC();
-    exe.linkLibCpp();
     exe.addIncludePath(.{ .path = "include" });
     exe.linkLibrary(lib);
     b.installArtifact(exe);
