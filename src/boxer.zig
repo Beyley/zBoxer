@@ -28,7 +28,7 @@ usingnamespace switch (builtin.os.tag) {
 
         pub export fn boxerShow(message: [*]u8, title: [*]u8, style: c.BoxerStyle, buttons: c.BoxerButtons) callconv(.C) c.BoxerSelection {
             if (instance == null) {
-                instance = std.DynLib.open("libgtk-3.so") catch unreachable;
+                instance = std.DynLib.open("libgtk-3.so") catch return c.BoxerSelectionError;
                 gtk_init_check = instance.?.lookup(GtkInitCheck, "gtk_init_check") orelse return c.BoxerSelectionError;
                 gtk_window_new = instance.?.lookup(GtkWindowNew, "gtk_window_new") orelse return c.BoxerSelectionError;
                 gtk_message_dialog_new = instance.?.lookup(GtkMessageDialogNew, "gtk_message_dialog_new") orelse return c.BoxerSelectionError;
