@@ -33,6 +33,14 @@ pub fn build(b: *std.Build) void {
             lib.linkFramework("Foundation");
             lib.linkFramework("Cocoa");
             lib.linkFramework("AppKit");
+            lib.linkFramework("ApplicationServices");
+            lib.linkFramework("CoreData");
+            lib.linkFramework("ColorSync");
+            lib.linkFramework("CoreGraphics");
+            lib.linkFramework("CoreServices");
+            lib.linkFramework("CoreText");
+            lib.linkFramework("ImageIO");
+            lib.linkFramework("CFNetwork");
         },
         else => @panic("Unknown target!"),
     }
