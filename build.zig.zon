@@ -3,8 +3,15 @@
     .version = "0.0.0",
     .dependencies = .{
         .xcode_frameworks = .{
-            .url = "https://github.com/hexops/xcode-frameworks-pkg/archive/f8b854f9a1f4b4602b4f998ee42588d524d44e52.tar.gz",
-            .hash = "1220ab440d1b8484038d619f743ef6a71e3683d13152eae941aa2d6bcb12fcea3135",
+            .url = "https://github.com/der-teufel-programming/xcode-frameworks-pkg/archive/8e01bf7edf3d0295a6ec6f12c374f430506a12f9.tar.gz",
+            .hash = "1220f1d9bded5649fcd8892128d162fe4cf31ea70f2fa67a956cb9ccbd19fe64067c",
         },
+    },
+    .paths = .{
+        "examples/",
+        "src/",
+        "LICENSE",
+        "build.zig",
+        "build.zig.zon",
     },
 }
