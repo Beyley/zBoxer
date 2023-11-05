@@ -23,7 +23,7 @@ pub fn build(b: *std.Build) void {
         .macos => {
             lib.defineCMacro("__kernel_ptr_semantics", "");
 
-            @import("xcode_frameworks").addPaths(b, lib);
+            @import("xcode_frameworks").addPaths(lib);
 
             lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_mac.m" }, .flags = &.{} });
 
@@ -54,7 +54,7 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     if (target.getOsTag() == .macos) {
-        @import("xcode_frameworks").addPaths(b, exe);
+        @import("xcode_frameworks").addPaths(exe);
     }
     exe.linkLibC();
     exe.addIncludePath(.{ .path = root_path ++ "include" });

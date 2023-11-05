@@ -31,7 +31,7 @@ pub fn main() !void {
     ));
 
     while (c.boxerShow(
-        "Differentbuttons may be used, and the user's selection can be checked. Would you like to see this message again?",
+        "Different buttons may be used, and the user's selection can be checked. Would you like to see this message again?",
         "Selection Example",
         c.BoxerStyleQuestion,
         c.BoxerButtonsYesNo,

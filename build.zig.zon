@@ -3,8 +3,8 @@
     .version = "0.0.0",
     .dependencies = .{
         .xcode_frameworks = .{
-            .url = "https://github.com/der-teufel-programming/xcode-frameworks-pkg/archive/8e01bf7edf3d0295a6ec6f12c374f430506a12f9.tar.gz",
-            .hash = "1220f1d9bded5649fcd8892128d162fe4cf31ea70f2fa67a956cb9ccbd19fe64067c",
+            .url = "https://github.com/hexops/xcode-frameworks/archive/8a920385383cc4c0a2a4f55b084d402a9400a5a8.tar.gz",
+            .hash = "122051b3c616c62d55a82207c1cb76e2264b26e8378f56b1e5376d7684bd13616589",
         },
     },
     .paths = .{
