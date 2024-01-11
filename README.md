@@ -37,9 +37,6 @@ const zboxer = b.dependency("zBoxer", .{
    .optimize = optimize,
 });
 const zboxer_lib = zboxer.artifact("boxer");
-if (target.getOsTag() == .macos) {
-   @import("xcode_frameworks").addPaths(b, exe);
-}
 exe.linkLibrary(zboxer_lib);
 try exe.include_dirs.appendSlice(zboxer_lib.include_dirs.items);
 ```

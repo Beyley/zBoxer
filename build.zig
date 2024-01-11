@@ -12,14 +12,12 @@ pub fn build(b: *std.Build) void {
     });
     lib.addIncludePath(.{ .path = root_path ++ "include" });
     lib.addIncludePath(.{ .path = root_path ++ "src" });
-    switch (target.getOsTag()) {
+    switch (target.result.os.tag) {
         .windows => {
             lib.defineCMacro("UNICODE", "1");
             lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_win.c" }, .flags = &.{} });
         },
-        .linux => {
-            // lib.linkSystemLibrary("gtk+-3.0");
-        },
+        .linux => {},
         .macos => {
             lib.defineCMacro("__kernel_ptr_semantics", "");
 
@@ -27,7 +25,7 @@ pub fn build(b: *std.Build) void {
 
             lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_mac.m" }, .flags = &.{} });
 
-            lib.linkSystemLibraryName("objc");
+            lib.linkSystemLibrary("objc");
 
             lib.linkFramework("CoreFoundation");
             lib.linkFramework("Foundation");
@@ -53,7 +51,7 @@ pub fn build(b: *std.Build) void {
         .root_source_file = .{ .path = root_path ++ "examples/example.zig" },
         .optimize = optimize,
     });
-    if (target.getOsTag() == .macos) {
+    if (target.result.isDarwin()) {
         @import("xcode_frameworks").addPaths(exe);
     }
     exe.linkLibC();

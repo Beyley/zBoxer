@@ -3,8 +3,8 @@
     .version = "0.0.0",
     .dependencies = .{
         .xcode_frameworks = .{
-            .url = "https://github.com/hexops/xcode-frameworks/archive/8a920385383cc4c0a2a4f55b084d402a9400a5a8.tar.gz",
-            .hash = "122051b3c616c62d55a82207c1cb76e2264b26e8378f56b1e5376d7684bd13616589",
+            .url = "https://github.com/hexops/xcode-frameworks/archive/ff1f5c15120b65504d8feccca8015a7e96ed580c.tar.gz",
+            .hash = "12207bc2707695102c636c26b60343e634127ee4d6e23210b1ae1664b2b2fea6076f",
         },
     },
     .paths = .{
