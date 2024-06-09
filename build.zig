@@ -1,29 +1,29 @@
 const std = @import("std");
 
-pub fn build(b: *std.Build) void {
+pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
     const lib = b.addStaticLibrary(.{
         .name = "boxer",
         .target = target,
-        .root_source_file = .{ .path = "src/boxer.zig" },
+        .root_source_file = b.path("src/boxer.zig"),
         .optimize = optimize,
     });
-    lib.addIncludePath(.{ .path = root_path ++ "include" });
-    lib.addIncludePath(.{ .path = root_path ++ "src" });
+    lib.addIncludePath(b.path("include"));
+    lib.addIncludePath(b.path("src"));
     switch (target.result.os.tag) {
         .windows => {
             lib.defineCMacro("UNICODE", "1");
-            lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_win.c" }, .flags = &.{} });
+            lib.addCSourceFile(.{ .file = b.path("src/boxer_win.c"), .flags = &.{} });
         },
         .linux => {},
         .macos => {
             lib.defineCMacro("__kernel_ptr_semantics", "");
 
-            @import("xcode_frameworks").addPaths(lib);
+            @import("xcode_frameworks").addPaths(&lib.root_module);
 
-            lib.addCSourceFile(.{ .file = .{ .path = root_path ++ "src/boxer_mac.m" }, .flags = &.{} });
+            lib.addCSourceFile(.{ .file = b.path("src/boxer_mac.m"), .flags = &.{} });
 
             lib.linkSystemLibrary("objc");
 
@@ -48,14 +48,15 @@ pub fn build(b: *std.Build) void {
     const exe = b.addExecutable(.{
         .name = "example",
         .target = target,
-        .root_source_file = .{ .path = root_path ++ "examples/example.zig" },
+        .root_source_file = b.path("examples/example.zig"),
         .optimize = optimize,
     });
     if (target.result.isDarwin()) {
-        @import("xcode_frameworks").addPaths(exe);
+        try exe.root_module.include_dirs.appendSlice(b.allocator, lib.root_module.include_dirs.items);
+        try exe.root_module.lib_paths.appendSlice(b.allocator, lib.root_module.lib_paths.items);
     }
     exe.linkLibC();
-    exe.addIncludePath(.{ .path = root_path ++ "include" });
+    exe.addIncludePath(b.path("include"));
     exe.linkLibrary(lib);
     b.installArtifact(exe);
 
@@ -67,9 +68,3 @@ pub fn build(b: *std.Build) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 }
-
-fn root() []const u8 {
-    return std.fs.path.dirname(@src().file) orelse ".";
-}
-
-const root_path = root() ++ "/";

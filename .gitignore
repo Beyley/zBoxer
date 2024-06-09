@@ -30,4 +30,4 @@
 # Built files
 build/
 zig-out/
-zig-cache/
+.zig-cache/

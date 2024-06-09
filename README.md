@@ -31,6 +31,7 @@ Just run `zig build` in the project root, can cross compile from/to all supporte
 ## Including zBoxer
 
 `build.zig`:
+
 ```zig
 const zboxer = b.dependency("zBoxer", .{
    .target = target,
@@ -38,25 +39,25 @@ const zboxer = b.dependency("zBoxer", .{
 });
 const zboxer_lib = zboxer.artifact("boxer");
 exe.linkLibrary(zboxer_lib);
-try exe.include_dirs.appendSlice(zboxer_lib.include_dirs.items);
+
+try exe.root_module.include_dirs.appendSlice(b.allocator, zboxer_lib.root_module.include_dirs.items);
+try exe.root_module.lib_paths.appendSlice(b.allocator, zboxer_lib.root_module.lib_paths.items);
 ```
 
 `build.zig.zon`:
+
 ```zig
 .{
    .name = "APPNAME",
    .version = "0.0.0",
    .dependencies = .{
       .zBoxer = .{
-         .url = "https://github.com/Beyley/zBoxer/archive/LATEST_COMMIT_HASH_HERE.tar.gz",
-      },
-      .xcode_frameworks = .{
-         .url = "https://github.com/hexops/xcode-frameworks-pkg/archive/d486474a6af7fafd89e8314e0bf7eca4709f811b.tar.gz",
-         .hash = "1220293eae4bf67a7c27a18a8133621337cde91a97bc6859a9431b3b2d4217dfb5fb",
+         .url = "git+https://github.com/Beyley/zBoxer#LATEST_COMMIT_HASH_HERE",
       },
    },
 }
 ```
+
 Then when it complains that the hash is wrong, add the corrosponding `.hash = "HASHHERE",` into the `zBoxer` dependency
 
 ## Using Boxer
