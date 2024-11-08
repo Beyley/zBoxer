@@ -19,9 +19,14 @@ pub fn build(b: *std.Build) !void {
         },
         .linux => {},
         .macos => {
-            lib.defineCMacro("__kernel_ptr_semantics", "");
-
-            @import("xcode_frameworks").addPaths(&lib.root_module);
+            if (b.lazyDependency("xcode_frameworks", .{
+                .target = target,
+                .optimize = optimize,
+            })) |dep| {
+                lib.addSystemFrameworkPath(dep.path("Frameworks"));
+                lib.addSystemIncludePath(dep.path("include"));
+                lib.addLibraryPath(dep.path("lib"));
+            }
 
             lib.addCSourceFile(.{ .file = b.path("src/boxer_mac.m"), .flags = &.{} });
 
